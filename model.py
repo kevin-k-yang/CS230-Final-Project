@@ -28,7 +28,7 @@ K.set_image_data_format('channels_last')
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
 
-import scraper
+from scraper import *
 
 # Model.py
 def main():
