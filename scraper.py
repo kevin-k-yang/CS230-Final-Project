@@ -16,7 +16,7 @@ def scrape(url):
 
 def main():
     # read ids from metadata file
-    filename = '/content/metadata.csv'
+    filename = '/metadata.csv'
     id_list = []
     with open(filename, 'r') as csvfile:
         datareader = csv.reader(csvfile)
@@ -35,3 +35,6 @@ def main():
             break
         dictionary[id_list[i]] = views
         print(views)
+
+if __name__ == "__main__":
+    main()
