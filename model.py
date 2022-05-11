@@ -33,6 +33,7 @@ from scraper import *
 # Model.py
 def main():
     print("Welcome to model.py")
+    print(dictionary)
     return 0
 
 if __name__ == "__main__":

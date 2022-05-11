@@ -1,11 +1,10 @@
-import numpy as np
-import tensorflow as tf
 from bs4 import BeautifulSoup
 import requests
 import csv
 from random import randint
 from time import sleep
 
+dictionary = {}
 # input url and output num views of video
 def scrape(url):
   soup = BeautifulSoup(requests.get(url).text, "html.parser")
@@ -16,7 +15,7 @@ def scrape(url):
 
 def main():
     # read ids from metadata file
-    filename = '/metadata.csv'
+    filename = 'metadata.csv'
     id_list = []
     with open(filename, 'r') as csvfile:
         datareader = csv.reader(csvfile)
@@ -26,15 +25,14 @@ def main():
     id_list = id_list[1:]
 
     # map ids to respective view counts
-    dictionary = {}
     for i in range(len(id_list)):
         url = "https://www.youtube.com/watch?v=" + id_list[i]
         views = scrape(url)
-        sleep(randint(1, 5))
+        sleep(1)
         if views == 0:
             break
         dictionary[id_list[i]] = views
-        print(views)
+        print(i, views)
 
 
 if __name__ == "__main__":
