@@ -23,21 +23,26 @@ def main():
 
     id_list = id_list[1:]
 
-    # map ids to respective view counts
-    dictionary = {}
-    for i in range(len(id_list)):
-        url = "https://www.youtube.com/watch?v=" + id_list[i]
-        views = scrape(url)
-        sleep(randint(1, 5))
-        if views == 0:
-            break
-        dictionary[id_list[i]] = views
-        print(i, views)
+    count = 0
+    with open('viewcounts.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            count += 1
     
+    print(count)
+
     with open('viewcounts.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        for key in dictionary: 
-            writer.writerow([key, dictionary[key]])
+
+        # for i in range(len(id_list)):
+        #     url = "https://www.youtube.com/watch?v=" + id_list[i]
+        #     views = scrape(url)
+        #     sleep(randint(1, 5))
+        #     if views == 0:
+        #         break
+        #     print(i, views)
+        #     writer.writerow([id_list[i], views])
+
 
 if __name__ == "__main__":
     main()
