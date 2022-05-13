@@ -29,19 +29,18 @@ def main():
         for row in reader:
             count += 1
     
-    print(count)
 
-    with open('viewcounts.csv', 'w', newline='') as file:
+    with open('viewcounts2.csv', 'w', newline='') as file:
         writer = csv.writer(file)
 
-        # for i in range(len(id_list)):
-        #     url = "https://www.youtube.com/watch?v=" + id_list[i]
-        #     views = scrape(url)
-        #     sleep(randint(1, 5))
-        #     if views == 0:
-        #         break
-        #     print(i, views)
-        #     writer.writerow([id_list[i], views])
+        for i in range(count + 1, len(id_list)):
+            url = "https://www.youtube.com/watch?v=" + id_list[i]
+            views = scrape(url)
+            sleep(randint(1, 5))
+            if views == 0:
+                break
+            print(i, views)
+            writer.writerow([id_list[i], views])
 
 
 if __name__ == "__main__":
