@@ -37,12 +37,14 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 
-# Model.py
+# Implement ResNet 50 pretrained weights for this task
+# This approach is borrowed from https://chroniclesofai.com/transfer-learning-with-keras-resnet-50/
 def main():
-    print("Welcome to model.py")
+    # preprocess images
     data_dir = "images"
     img_height,img_width=180,180
     batch_size=32
+    # training set
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
         data_dir,
         validation_split=0.2,
@@ -50,7 +52,36 @@ def main():
         seed=123,
         image_size=(img_height, img_width),
         batch_size=batch_size)
+    # validation set
+    val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        data_dir,
+        validation_split=0.2,
+        subset="validation",
+        seed=123,
+        image_size=(img_height, img_width),
+        batch_size=batch_size)
 
+    # load resnet model
+    resnet_model = Sequential()
+    pretrained_model= tf.keras.applications.ResNet50(include_top=False,
+                    input_shape=(180,180,3),
+                    pooling='avg',classes=5,
+                    weights='imagenet')
+    for layer in pretrained_model.layers:
+            layer.trainable=False
+    resnet_model.add(pretrained_model)
+
+    # add output layers
+    resnet_model.add(Flatten())
+    resnet_model.add(Dense(512, activation='relu'))
+    resnet_model.add(Dense(1, activation='linear'))
+    resnet_model.summary()
+
+    # train model
+    resnet_model.compile(optimizer=Adam(learning_rate=0.001),loss='mean_squared_error',metrics=['accuracy'])
+    history = resnet_model.fit(train_ds, validation_data=val_ds, epochs=10)
+    
+    print("Welcome to model.py")
     return 0
 
 if __name__ == "__main__":
