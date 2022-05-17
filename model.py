@@ -23,7 +23,7 @@ def parse_view_counts(link):
         first_line = True
         for row in csv_reader:
             if not first_line:
-                view_count_map[row[0]] = row[1]
+                view_count_map[row[0]] = int(row[1])
             else:
                 first_line = False
 
