@@ -15,8 +15,7 @@ from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-MILLI = 1000000
-
+# map youtube ID to views with data from viewcounts.csv
 def parse_view_counts(link):
     view_count_map = {}
     with open(link) as csv_file:
@@ -24,11 +23,9 @@ def parse_view_counts(link):
         first_line = True
         for row in csv_reader:
             if not first_line:
-                #view_count_map[row[0]] = int(row[1])
-                view_count_map[row[0]] = 1 if int(row[1]) >= MILLI else 0
+                view_count_map[row[0]] = int(row[1])
             else:
                 first_line = False
-
     return view_count_map
 
 
@@ -37,7 +34,6 @@ def parse_view_counts(link):
 def main():
     # parse the views
     view_count_map = parse_view_counts("viewcounts.csv")
-
     # preprocess images
     data_dir = "images"
     img_height,img_width=180,180
@@ -70,11 +66,11 @@ def main():
     # add output layers
     resnet_model.add(Flatten())
     resnet_model.add(Dense(512, activation='relu'))
-    resnet_model.add(Dense(1, activation='linear'))
+    resnet_model.add(Dense(1, activation='sigmoid'))
     resnet_model.summary()
 
     # train model
-    resnet_model.compile(optimizer=Adam(learning_rate=0.001),loss='mean_squared_error',metrics=['accuracy'])
+    resnet_model.compile(optimizer=Adam(learning_rate=0.001),loss='binary_crossentropy',metrics=['accuracy'])
     history = resnet_model.fit(train_ds, validation_data=val_ds, epochs=10)
     
     print("Welcome to model.py")
