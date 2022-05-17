@@ -35,6 +35,7 @@ def parse_view_counts(link):
 def main():
     # parse the views
     view_count_map = parse_view_counts("viewcounts.csv")
+
     # preprocess images
     data_dir = "images"
     img_height,img_width=180,180
