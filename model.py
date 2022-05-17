@@ -15,6 +15,7 @@ from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
+MILLI = 1000000
 
 def parse_view_counts(link):
     view_count_map = {}
@@ -23,7 +24,8 @@ def parse_view_counts(link):
         first_line = True
         for row in csv_reader:
             if not first_line:
-                view_count_map[row[0]] = int(row[1])
+                #view_count_map[row[0]] = int(row[1])
+                view_count_map[row[0]] = 1 if int(row[1]) >= MILLI else 0
             else:
                 first_line = False
 
