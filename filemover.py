@@ -20,6 +20,7 @@ def parse_view_counts(link):
                 first_line = False
     return view_count_map
 
+# separate images based on virality (>= million views)
 def main():
     viewcounts_map = parse_view_counts(FILENAME)
 

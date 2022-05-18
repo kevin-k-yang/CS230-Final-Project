@@ -16,24 +16,22 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 # map youtube ID to views with data from viewcounts.csv
-def parse_view_counts(link):
-    view_count_map = {}
-    with open(link) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        first_line = True
-        for row in csv_reader:
-            if not first_line:
-                view_count_map[row[0]] = int(row[1])
-            else:
-                first_line = False
-    return view_count_map
+# def parse_view_counts(link):
+#     view_count_map = {}
+#     with open(link) as csv_file:
+#         csv_reader = csv.reader(csv_file, delimiter=',')
+#         first_line = True
+#         for row in csv_reader:
+#             if not first_line:
+#                 view_count_map[row[0]] = int(row[1])
+#             else:
+#                 first_line = False
+#     return view_count_map
 
 
 # Implement ResNet 50 pretrained weights for this task
 # This approach is borrowed from https://chroniclesofai.com/transfer-learning-with-keras-resnet-50/
 def main():
-    # parse the views
-    view_count_map = parse_view_counts("viewcounts.csv")
     # preprocess images
     data_dir = "images"
     img_height,img_width=180,180
@@ -72,6 +70,18 @@ def main():
     # train model
     resnet_model.compile(optimizer=Adam(learning_rate=0.001),loss='binary_crossentropy',metrics=['accuracy'])
     history = resnet_model.fit(train_ds, validation_data=val_ds, epochs=10)
+
+    # display results
+    fig1 = plt.gcf()
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.axis(ymin=0.4,ymax=1)
+    plt.grid()
+    plt.title('Model Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epochs')
+    plt.legend(['train', 'validation'])
+    plt.show()
     
     print("Welcome to model.py")
     return 0
