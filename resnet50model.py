@@ -2,8 +2,8 @@
 #          Kevin K Yang    (kevvyang@stanford.edu)
 #          Brian Wu        (brian.wu@stanford.edu)
 #
-# Description: This file contains the CNN (Convolutional Neural Network) model used
-#
+# Description: This file contains the CNN we built using the ResNet50 pretrained model
+# We only train on 2 classes here (binary classificaton): images with more and less views than 1M
 
 # imports
 import matplotlib.pyplot as plt
@@ -55,7 +55,7 @@ def main():
     resnet_model = Sequential()
     pretrained_model= tf.keras.applications.ResNet50(include_top=False,
                     input_shape=(180,180,3),
-                    pooling='avg',classes=5,
+                    pooling='avg',classes=2,
                     weights='imagenet')
     for layer in pretrained_model.layers:
             layer.trainable=False
