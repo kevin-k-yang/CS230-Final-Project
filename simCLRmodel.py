@@ -9,7 +9,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import PIL
-from images import image_dataset
 import tensorflow.compat.v1 as tf1
 tf1.disable_eager_execution()
 import tensorflow as tf
@@ -19,21 +18,24 @@ from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-import images.image_dataset
+# import images.image_dataset
 
 
 # Load SimCLR pretrained weights for this task
 # This approach is borrowed from https://github.com/google-research/simclr/blob/master/colabs/load_and_inference.ipynb
 def main():
     # preprocess images
-    data_dir = "images/image_dataset"
+    data_dir = "images"
     img_height,img_width=180,180
-    batch_size=32
+    batch_size=5
     # training set
-    tfds_dataset, tfds_info = tfds.load(
-    data_dir, split='train', with_info=True)
-    num_images = tfds_info.splits['train'].num_examples
-    num_classes = tfds_info.features['label'].num_classes
+    # tfds_dataset, tfds_info = tfds.load(
+    # 'tf_flowers', split='train', with_info=True)
+    # num_images = tfds_info.splits['train'].num_examples
+    # num_classes = tfds_info.features['label'].num_classes
+
+    dataset = tf.data.Dataset.list_files("/images/*")
+    print(dataset)
 
     # train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     #     data_dir,
@@ -49,10 +51,9 @@ def main():
     #     seed=123,
     #     image_size=(img_height, img_width), batch_size=batch_size)
 
-    # print(train_ds)
 
-    x = tfds_dataset.batch(batch_size)
-    x = tf.data.make_one_shot_iterator(x).get_next()
+    # x = tfds_dataset.batch(batch_size)
+    # x = tf1.data.make_one_shot_iterator(x).get_next()
 
     # load SimCLR model
     hub_path = "gs://simclr-checkpoints/simclrv2/pretrained/r50_1x_sk0/hub/"
