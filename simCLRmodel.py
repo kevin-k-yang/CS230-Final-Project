@@ -12,7 +12,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_datasets as tfds
 from tensorflow import keras
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
@@ -41,10 +41,11 @@ def main():
     # load simCLR model
     hub_path = 'gs://simclr-checkpoints/simclrv2/finetuned_100pct/r50_1x_sk0/hub/'
     model = hub.KerasLayer(hub_path, trainable=False)
-    
+    layer = tf.keras.layers.Dropout(.2, input_shape=(2,))
     simclr_model = Sequential()
     simclr_model.add(model)
     simclr_model.add(Flatten())
+    simclr_model.add(Dropout(0.2, input_shape=(180*180,)))
     simclr_model.add(Dense(512, activation='relu'))
     simclr_model.add(Dense(1, activation='sigmoid'))
 
