@@ -46,10 +46,12 @@ def main():
     simclr_model.add(Flatten())
     simclr_model.add(Dropout(0.2, input_shape=(180*180,)))
     simclr_model.add(Dense(512, activation='relu'))
-    simclr_model.add(Dense(1, activation='sigmoid'))
+    # simclr_model.add(Dense(1, activation="sigmoid"))
+    simclr_model.add(Dense(4, activation='softmax'))
 
     # train model
-    simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='binary_crossentropy',metrics=['accuracy'])
+    simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='CategoricalCrossentropy',metrics=['accuracy'])
+    # simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='BinaryCrossentropy',metrics=['accuracy'])
     history = simclr_model.fit(train_ds, validation_data=val_ds, epochs=10)
 
     # display results
