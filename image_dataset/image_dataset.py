@@ -49,7 +49,7 @@ class ImageDataset(tfds.core.GeneratorBasedBuilder):
   def _split_generators(self, dl_manager: tfds.download.DownloadManager):
     """Returns SplitGenerators."""
     # TODO(image_dataset): Downloads the data and defines the splits
-    image_path = dl_manager.manual_dir / 'images/Above'
+    image_path = '/Users/Aryan/Documents/CS/CS230/CS230-Final-Project/images/Above'
     path = dl_manager.extract(image_path)
 
     # TODO(image_dataset): Returns the Dict[split names, Iterator[Key, Example]]

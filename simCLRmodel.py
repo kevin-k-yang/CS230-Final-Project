@@ -9,11 +9,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import PIL
-import tensorflow.compat.v1 as tf1
-tf1.disable_eager_execution()
+# import tensorflow.compat.v1 as tf1
+# tf1.disable_eager_execution()
 import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_datasets as tfds
+from tensorflow import keras
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
@@ -34,34 +35,39 @@ def main():
     # num_images = tfds_info.splits['train'].num_examples
     # num_classes = tfds_info.features['label'].num_classes
 
-    dataset = tf.data.Dataset.list_files("/images/*")
-    print(dataset)
+    # dataset = tf.data.Dataset.list_files("/images/*")
+    # print(dataset)
 
-    # train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-    #     data_dir,
-    #     validation_split=0.2,
-    #     subset="training",
-    #     seed=123,
-    #     image_size=(img_height, img_width), batch_size=batch_size)
-    # # validation set
-    # val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-    #     data_dir,
-    #     validation_split=0.2,
-    #     subset="validation",
-    #     seed=123,
-    #     image_size=(img_height, img_width), batch_size=batch_size)
-
-
+    train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        data_dir,
+        validation_split=0.2,
+        subset="training",
+        seed=123,
+        image_size=(img_height, img_width), batch_size=batch_size)
+    # validation set
+    val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        data_dir,
+        validation_split=0.2,
+        subset="validation",
+        seed=123,
+        image_size=(img_height, img_width), batch_size=batch_size)
+    
     # x = tfds_dataset.batch(batch_size)
     # x = tf1.data.make_one_shot_iterator(x).get_next()
 
     # load SimCLR model
-    hub_path = "gs://simclr-checkpoints/simclrv2/pretrained/r50_1x_sk0/hub/"
-    module = hub.Module(hub_path, trainable=False)
-    print("done with hub shit")
-    key = module(inputs=x['image'], signature="default", as_dict=True)
-    logits_t = key['logits_sup'][:, :]
-    print(key)
+    # hub_path = "gs://simclr-checkpoints/simclrv2/pretrained/r50_1x_sk0/hub/"
+    # module = hub.Module(hub_path, trainable=False)
+    # print("done with hub shit")
+    # key = module(inputs=train_ds, signature="default", as_dict=True)
+    # logits_t = key['logits_sup'][:, :]
+    # print(key)
+    # model = hub.load("https://tfhub.dev/rishit-dagli/nnclr/1")
+    model = hub.KerasLayer("https://tfhub.dev/rishit-dagli/nnclr/1", trainable=False)
+    # model = tf.keras.models.load_model("/Users/Aryan/Downloads/nnclr_1/")
+    # model = tf.saved_model.load("/Users/Aryan/Downloads/nnclr_1/")
+
+    print(model)
 
     # resnet_model = Sequential()
     # pretrained_model= tf.keras.applications.ResNet50(include_top=False,
@@ -72,11 +78,15 @@ def main():
     #         layer.trainable=False
     # resnet_model.add(pretrained_model)
 
-    # # add output layers
-    # resnet_model.add(Flatten())
-    # resnet_model.add(Dense(512, activation='relu'))
-    # resnet_model.add(Dense(1, activation='sigmoid'))
-    # resnet_model.summary()
+    nnclr_model = Sequential()
+    for layer in model.layers:
+        layer.trainable=False
+    nnclr_model.add(model)
+
+    nnclr_model.add(Flatten())
+    nnclr_model.add(Dense(512, activation='relu'))
+    nnclr_model.add(Dense(1, activation='sigmoid'))
+    nnclr_model.summary()
 
     # # train model
     # resnet_model.compile(optimizer=Adam(learning_rate=0.001),loss='binary_crossentropy',metrics=['accuracy'])
