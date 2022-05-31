@@ -47,7 +47,7 @@ def main():
     simclr_model.add(Dropout(0.2, input_shape=(180*180,)))
     simclr_model.add(Dense(512, activation='relu'))
     # simclr_model.add(Dense(1, activation="sigmoid"))
-    simclr_model.add(Dense(4, activation='softmax'))
+    simclr_model.add(Dense(1, activation='softmax'))
 
     # train model
     simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='CategoricalCrossentropy',metrics=['accuracy'])
