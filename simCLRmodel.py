@@ -22,7 +22,7 @@ def main():
     # preprocess images
     data_dir = "images"
     img_height,img_width=180,180
-    batch_size=5
+    batch_size=32
     # training set
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
         data_dir,
@@ -54,7 +54,7 @@ def main():
     # train model
     simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='CategoricalCrossentropy',metrics=['accuracy'])
     # simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='BinaryCrossentropy',metrics=['accuracy'])
-    history = simclr_model.fit(train_ds, validation_data=val_ds, epochs=10)
+    history = simclr_model.fit(train_ds, validation_data=val_ds, epochs=100)
 
     # display results
     fig1 = plt.gcf()
