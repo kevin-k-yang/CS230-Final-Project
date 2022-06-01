@@ -5,8 +5,10 @@
 # Description: This file contains the CNN we built using the ResNet50 pretrained model
 # We first trained on 2 classes here (binary classificaton): images with more and less views than 1M
 # We then tried 4 different classes with ranges for view counts:
-#     six:     < 1M
+#     five:    10K < x < 100K
+#     six:     100K < x < 1M
 #     seven:   1M < x < 10M
+#     eight:   10M < x < 100M
 
 
 # imports

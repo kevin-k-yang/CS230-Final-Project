@@ -3,7 +3,12 @@
 #          Brian Wu        (brian.wu@stanford.edu)
 #
 # Description: This file contains the CNN we built using the SimCLR pretrained model
-#
+# We first trained on 2 classes here (binary classificaton): images with more and less views than 1M
+# We then tried 4 different classes with ranges for view counts:
+#     five:    10K < x < 100K
+#     six:     100K < x < 1M
+#     seven:   1M < x < 10M
+#     eight:   10M < x < 100M
 
 # imports
 import matplotlib.pyplot as plt
@@ -29,7 +34,7 @@ def main():
         label_mode="categorical",
         validation_split=0.2,
         subset="training",
-        seed=123,
+        seed=69,
         image_size=(img_height, img_width), batch_size=batch_size)
     # validation set
     val_ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -37,7 +42,7 @@ def main():
         label_mode="categorical",
         validation_split=0.2,
         subset="validation",
-        seed=123,
+        seed=69,
         image_size=(img_height, img_width), batch_size=batch_size)
 
     # load simCLR model
@@ -54,7 +59,7 @@ def main():
     # train model
     simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='CategoricalCrossentropy',metrics=['accuracy'])
     # simclr_model.compile(optimizer=Adam(learning_rate=0.001),loss='BinaryCrossentropy',metrics=['accuracy'])
-    history = simclr_model.fit(train_ds, validation_data=val_ds, epochs=100)
+    history = simclr_model.fit(train_ds, validation_data=val_ds, epochs=10)
 
     # display results
     fig1 = plt.gcf()
