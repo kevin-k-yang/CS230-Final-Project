@@ -1,3 +1,14 @@
+# Authors: Aryan Chaudhary (achaud@stanford.edu)
+#          Kevin K Yang    (kevvyang@stanford.edu)
+#          Brian Wu        (brian.wu@stanford.edu)
+#
+# Description: This file includes the code that we use to sort our datasets. Initially we had the value MILLI = 1000000 to create an
+# up-down 1,000,000 for our binary classifier, but then we repurposed this to be a log scale multiple classifier
+#     five:    10K < x < 100K
+#     six:     100K < x < 1M
+#     seven:   1M < x < 10M
+#     eight:   10M < x < 100M
+
 import os
 import csv
 import numpy as np

@@ -1,3 +1,9 @@
+# Authors: Aryan Chaudhary (achaud@stanford.edu)
+#          Kevin K Yang    (kevvyang@stanford.edu)
+#          Brian Wu        (brian.wu@stanford.edu)
+#
+# Description: From our online dataset, we were given the thumbnail and a youtube link. Because we needed video views, we created this
+# file to scrape the viewcount from each youtube url.
 from bs4 import BeautifulSoup
 import requests
 import csv
